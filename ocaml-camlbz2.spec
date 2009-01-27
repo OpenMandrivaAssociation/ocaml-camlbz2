@@ -42,7 +42,9 @@ make
 rm -rf %{buildroot}
 export DESTDIR=%{buildroot}
 export OCAMLFIND_DESTDIR=%{buildroot}/%{_libdir}/ocaml
+export DLLDIR=$OCAMLFIND_DESTDIR/stublibs
 mkdir -p $OCAMLFIND_DESTDIR/bz2
+mkdir -p $DLLDIR
 make install
 
 %clean
@@ -55,7 +57,7 @@ rm -rf %{buildroot}
 %{_libdir}/ocaml/bz2/META
 %{_libdir}/ocaml/bz2/*.cma
 %{_libdir}/ocaml/bz2/*.cmi
-%{_libdir}/ocaml/bz2/*.so*
+%{_libdir}/ocaml/stublibs/*.so*
 
 %files devel
 %defattr(-,root,root)
