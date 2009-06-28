@@ -1,6 +1,6 @@
 Name:           ocaml-camlbz2
 Version:        0.6.0
-Release:        %mkrel 1
+Release:        %mkrel 2
 Summary:        OCaml bindings for the libbz2 (AKA, bzip2) (de)compression library
 License:        LGPL
 Group:          Development/Other
