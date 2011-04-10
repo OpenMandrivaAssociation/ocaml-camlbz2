@@ -1,69 +1,60 @@
-Name:           ocaml-camlbz2
+%define	oname	camlbz2
+%define	modname	bz2
+
+Name:           ocaml-%{oname}
 Version:        0.6.0
-Release:        %mkrel 2
-Summary:        OCaml bindings for the libbz2 (AKA, bzip2) (de)compression library
-License:        LGPL
+Release:        7
+Summary:        OCaml library for reading and writing zip, jar and gzip files
 Group:          Development/Other
+License:        LGPLv2 with exceptions
 URL:            http://camlbz2.forge.ocamlcore.org/
-Source0:        http://forge.ocamlcore.org/frs/download.php/72/camlbz2-%{version}.tar.gz
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}
-BuildRequires:  ocaml-findlib
-BuildRequires:  libbzip2-devel
+Source0:        https://forge.ocamlcore.org/frs/download.php/72/%{oname}-%{version}.tar.gz
+ExcludeArch:    sparc64 s390 s390x
+BuildRequires:  ocaml
+BuildRequires:  ocaml-findlib-devel
+BuildRequires:  bzip2-devel
 
 %description
-CamlBZ2 provides OCaml bindings for libbz2 (AKA bzip2), a popular
-compression library which typically compresses better (i.e., smaller
-resulting files) than gzip.
+CamlBZ2 provides OCaml bindings for libbz2 (AKA bzip2), a popular compression
+library which typically compresses better (i.e., smaller resulting files) than
+gzip.
 
-Using CamlBZ2 you can read and write compressed "files", where
-files can be anything offering an in_channel/out_channel abstraction
-(files, sockets, ...).
+Using CamlBZ2 you can read and write compressed "files", where files can be
+anything offering an in_channel/out_channel abstraction (files, sockets, ...).
 
-Also, with CamlBZ2 you can compress and decompress strings in memory
-using the bzip2 compression algorithm.
+Also, with CamlBZ2 you can compress and decompress strings in memory using the
+bzip2 compression algorithm.
 
 %package        devel
 Summary:        Development files for %{name}
-Group:          Development/Other
-Requires:       %{name} = %{version}-%{release}
+Requires:       %{name} = %{EVRD}
 
 %description    devel
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
 
 %prep
-%setup -q -n camlbz2-%{version}
+%setup -q -n %{oname}-%{version}
 
 %build
-./configure
-make
+%configure2_5x
+%make
 
 %install
-rm -rf %{buildroot}
-export DESTDIR=%{buildroot}
-export OCAMLFIND_DESTDIR=%{buildroot}/%{_libdir}/ocaml
-export DLLDIR=$OCAMLFIND_DESTDIR/stublibs
-mkdir -p $OCAMLFIND_DESTDIR/bz2
-mkdir -p $DLLDIR
-make install
-
-%clean
-rm -rf %{buildroot}
+make install DESTDIR=%{buildroot}%{_libdir}/ocaml
 
 %files
-%defattr(-,root,root)
-%doc BUGS COPYING ChangeLog INSTALL LICENSE README ROADMAP
-%dir %{_libdir}/ocaml/bz2
-%{_libdir}/ocaml/bz2/META
-%{_libdir}/ocaml/bz2/*.cma
-%{_libdir}/ocaml/bz2/*.cmi
-%{_libdir}/ocaml/stublibs/*.so*
+%doc LICENSE
+%{_libdir}/ocaml/%{modname}
+%exclude %{_libdir}/ocaml/%{modname}/*.a
+%exclude %{_libdir}/ocaml/%{modname}/*.cmxa
+%exclude %{_libdir}/ocaml/%{modname}/*.cmx
+%exclude %{_libdir}/ocaml/%{modname}/*.mli
 
 %files devel
-%defattr(-,root,root)
-%doc doc
-%{_libdir}/ocaml/bz2/*.a
-%{_libdir}/ocaml/bz2/*.cmxa
-%{_libdir}/ocaml/bz2/*.cmx
-%{_libdir}/ocaml/bz2/*.mli
+%doc LICENSE README
+%{_libdir}/ocaml/%{modname}/*.a
+%{_libdir}/ocaml/%{modname}/*.cmxa
+%{_libdir}/ocaml/%{modname}/*.cmx
+%{_libdir}/ocaml/%{modname}/*.mli
 
