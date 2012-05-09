@@ -3,7 +3,7 @@
 
 Name:           ocaml-%{oname}
 Version:        0.6.0
-Release:        7
+Release:        8
 Summary:        OCaml library for reading and writing zip, jar and gzip files
 Group:          Development/Other
 License:        LGPLv2 with exceptions
