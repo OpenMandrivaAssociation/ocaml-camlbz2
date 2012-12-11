@@ -58,3 +58,23 @@ make install DESTDIR=%{buildroot}%{_libdir}/ocaml
 %{_libdir}/ocaml/%{modname}/*.cmx
 %{_libdir}/ocaml/%{modname}/*.mli
 
+
+
+%changelog
+* Wed May 09 2012 Crispin Boylan <crisb@mandriva.org> 0.6.0-8
++ Revision: 797833
+- Rebuild
+
+  + Per Øyvind Karlsen <peroyvind@mandriva.org>
+    - imported package ocaml-camlbz2
+
+* Sun Jun 28 2009 Guillaume Rousse <guillomovitch@mandriva.org> 0.6.0-2mdv2011.0
++ Revision: 390237
+- rebuild
+
+* Tue Jan 27 2009 Florent Monnier <blue_prawn@mandriva.org> 0.6.0-1mdv2009.1
++ Revision: 334307
+- summary-ended-with-dot
+- stublibs dir for dll
+- import ocaml-camlbz2
+
