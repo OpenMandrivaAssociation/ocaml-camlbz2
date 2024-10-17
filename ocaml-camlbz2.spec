@@ -7,7 +7,7 @@ Release:        9
 Summary:        OCaml library for reading and writing zip, jar and gzip files
 Group:          Development/Other
 License:        LGPLv2 with exceptions
-URL:            http://camlbz2.forge.ocamlcore.org/
+URL:            https://camlbz2.forge.ocamlcore.org/
 Source0:        https://forge.ocamlcore.org/frs/download.php/72/%{oname}-%{version}.tar.gz
 ExcludeArch:    sparc64 s390 s390x
 BuildRequires:  ocaml
