@@ -10,6 +10,11 @@ License:        LGPLv2 with exceptions
 URL:            https://camlbz2.forge.ocamlcore.org/
 Source0:        https://forge.ocamlcore.org/frs/download.php/72/%{oname}-%{version}.tar.gz
 ExcludeArch:    sparc64 s390 s390x
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:  ocaml
 BuildRequires:  ocaml-findlib-devel
 BuildRequires:  bzip2-devel
