@@ -3,7 +3,7 @@
 
 Name:           ocaml-%{oname}
 Version:        0.6.0
-Release:	14
+Release:	15
 Summary:        OCaml library for reading and writing zip, jar and gzip files
 Group:          Development/Other
 License:        LGPLv2 with exceptions
@@ -40,26 +40,23 @@ developing applications that use %{name}.
 
 %prep
 %setup -q -n camlbz2-%{version}
-# OCaml 5: Pervasives gone; C API renames
 sed -i 's/Pervasives\.//g' *.ml *.mli 2>/dev/null || true
-sed -i \
-	-e 's/alloc_string/caml_alloc_string/g' \
-	-e 's/string_length/caml_string_length/g' \
-	-e 's/invalid_argument/caml_invalid_argument/g' \
-	-e 's/raise_out_of_memory/caml_raise_out_of_memory/g' \
-	-e 's/copy_string/caml_copy_string/g' \
-	-e 's/alloc_custom/caml_alloc_custom/g' \
-	-e 's/raise_sys_error/caml_raise_sys_error/g' \
-	-e 's/raise_constant/caml_raise_constant/g' \
-	-e 's/raise_with_string/caml_raise_with_string/g' \
-	-e 's/raise_end_of_file/caml_raise_end_of_file/g' \
-	-e 's/failwith/caml_failwith/g' \
-	-e 's/alloc_small/caml_alloc_small/g' \
-	c_bz.c
-grep -q 'caml/alloc.h' c_bz.c || sed -i 's|#include <caml/mlvalues.h>|#include <caml/mlvalues.h>
-#include <caml/alloc.h>
-#include <caml/memory.h>
-#include <caml/fail.h>|' c_bz.c
+# OCaml 5 C API renames (avoid double caml_ prefix)
+perl -i -pe '
+  for my $s (qw(
+    raise_with_string raise_with_arg raise_out_of_memory raise_sys_error
+    invalid_argument copy_string alloc_custom alloc_string string_length
+    failwith alloc_small raise_constant raise_end_of_file
+  )) {
+    s/(?<![A-Za-z0-9_])$s\s*\(/caml_$s(/g;
+  }
+  s/caml_caml_/caml_/g;
+  
+if (!/caml\/fail\.h/) {
+  s|#include <caml/mlvalues.h>|#include <caml/mlvalues.h>\n#include <caml/alloc.h>\n#include <caml/memory.h>\n#include <caml/fail.h>\n#include <caml/custom.h>|;
+}
+
+' c_bz.c
 
 
 %build
