@@ -3,7 +3,7 @@
 
 Name:           ocaml-%{oname}
 Version:        0.6.0
-Release:	13
+Release:	14
 Summary:        OCaml library for reading and writing zip, jar and gzip files
 Group:          Development/Other
 License:        LGPLv2 with exceptions
@@ -40,7 +40,8 @@ developing applications that use %{name}.
 
 %prep
 %setup -q -n camlbz2-%{version}
-# OCaml 5 C API renames
+# OCaml 5: Pervasives gone; C API renames
+sed -i 's/Pervasives\.//g' *.ml *.mli 2>/dev/null || true
 sed -i \
 	-e 's/alloc_string/caml_alloc_string/g' \
 	-e 's/string_length/caml_string_length/g' \
@@ -49,8 +50,17 @@ sed -i \
 	-e 's/copy_string/caml_copy_string/g' \
 	-e 's/alloc_custom/caml_alloc_custom/g' \
 	-e 's/raise_sys_error/caml_raise_sys_error/g' \
+	-e 's/raise_constant/caml_raise_constant/g' \
+	-e 's/raise_with_string/caml_raise_with_string/g' \
+	-e 's/raise_end_of_file/caml_raise_end_of_file/g' \
+	-e 's/failwith/caml_failwith/g' \
+	-e 's/alloc_small/caml_alloc_small/g' \
 	c_bz.c
-grep -q 'caml/alloc.h' c_bz.c || sed -i 's|#include <caml/mlvalues.h>|#include <caml/mlvalues.h>\n#include <caml/alloc.h>\n#include <caml/memory.h>\n#include <caml/fail.h>|' c_bz.c
+grep -q 'caml/alloc.h' c_bz.c || sed -i 's|#include <caml/mlvalues.h>|#include <caml/mlvalues.h>
+#include <caml/alloc.h>
+#include <caml/memory.h>
+#include <caml/fail.h>|' c_bz.c
+
 
 %build
 %configure2_5x
