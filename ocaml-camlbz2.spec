@@ -3,7 +3,7 @@
 
 Name:           ocaml-%{oname}
 Version:        0.6.0
-Release:	11
+Release:	12
 Summary:        OCaml library for reading and writing zip, jar and gzip files
 Group:          Development/Other
 License:        LGPLv2 with exceptions
@@ -40,6 +40,16 @@ developing applications that use %{name}.
 
 %prep
 %setup -q -n camlbz2-%{version}
+# OCaml 5 C API renames
+sed -i -e "s/\balloc_string\b/caml_alloc_string/g" 
+       -e "s/\bstring_length\b/caml_string_length/g" 
+       -e "s/\binvalid_argument\b/caml_invalid_argument/g" 
+       -e "s/\braise_out_of_memory\b/caml_raise_out_of_memory/g" 
+       -e "s/\bcopy_string\b/caml_copy_string/g" 
+       -e "s/\balloc_custom\b/caml_alloc_custom/g" 
+       -e "s/\braise_sys_error\b/caml_raise_sys_error/g" 
+       -e "s/#include <caml\/mlvalues.h>/#include <caml\/mlvalues.h>\n#include <caml\/alloc.h>\n#include <caml\/memory.h>\n#include <caml\/fail.h>/" 
+       c_bz.c
 
 %build
 %configure2_5x
